@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Loan Form Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Use Inter for form elements, but allow browser default for Marathi */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        /* Styles for the printable area to mimic the PDF */
+        #print-area {
+            font-family: sans-serif; /* Let browser pick best Devanagari font */
+            color: #000;
+            line-height: 1.6; /* Reduced line height */
+        }
+
+        #print-area h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #333;
+        }
+
+        #print-area .header-text {
+            font-size: 10px;
+            color: #444;
+            line-height: 1.4;
+        }
+
+        #print-area .form-title {
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 0.5rem; /* Reduced margin */
+            margin-bottom: 0.25rem; /* Reduced margin */
+            text-decoration: underline;
+        }
+
+        #print-area .sub-title {
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem; /* Reduced margin */
+        }
+
+        #print-area table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem; /* Reduced margin */
+            margin-bottom: 0.5rem; /* Reduced margin */
+            font-size: 14px;
+        }
+
+        #print-area th, #print-area td {
+            border: 1px solid #000;
+            padding: 4px 8px; /* Reduced padding */
+            text-align: left;
+        }
+
+        #print-area th {
+            background-color: #f0f0f0;
+            font-weight: 700;
+        }
+        
+        #print-area .signature-section {
+            margin-top: 1.5rem; /* Reduced margin */
+            font-size: 14px;
+            line-height: 2.2; /* Reduced line height */
+        }
+        
+        #print-area .data-field {
+            font-weight: 700;
+            color: #0d47a1; /* Dark blue to show dynamic data */
+            display: inline-block;
+            min-width: 50px;
+            border-bottom: 1px dotted #ccc;
+            padding: 0 4px;
+            /* Make placeholder '...' less intrusive */
+            font-style: italic;
+            color: #94a3b8;
+        }
+        
+        #print-area .data-field:not(:empty) {
+            font-style: normal;
+            color: #0d47a1;
+        }
+
+
+        /* Print styles */
+        @media print {
+            body {
+                background-color: #fff;
+            }
+            body * {
+                visibility: hidden;
+            }
+            #print-area, #print-area * {
+                visibility: visible;
+            }
+            #print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0.7in; /* Reduced print padding */
+                border: none;
+                box-shadow: none;
+                font-size: 10pt; /* Reduced print font size */
+                color: #000;
+                line-height: 1.5; /* Reduced print line height */
+            }
+            #print-area .data-field {
+                color: #000 !important; /* Make data black for printing */
+                border-bottom: none;
+                font-style: normal !important;
+                /* If it's just '...' print it faded */
+                color: #000 !important;
+            }
+            
+            #print-area .data-field:empty {
+                 border-bottom: 1px solid #000; /* Add underline for empty fields on print */
+            }
+
+            #print-area img {
+                max-width: 180px !important; /* Constrain image size on print */
+            }
+            
+            /* Hide the form and controls when printing */
+            #form-container, #title-bar {
+                display: none;
+            }
+            
+            /* Tighter spacing for print */
+            #print-area p {
+                margin: 0.25rem 0;
+            }
+            #print-area .mt-4 { margin-top: 0.5rem !important; }
+            #print-area .mt-8 { margin-top: 1rem !important; }
+            #print-area .mt-12 { margin-top: 1.5rem !important; }
+            #print-area .my-6 { margin-top: 1rem !important; margin-bottom: 1rem !important; }
+            #print-area .signature-section { margin-top: 1.5rem !important; line-height: 2 !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Title Bar --><div id="title-bar" class="bg-white shadow-md p-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800">Gold Loan Form Generator</h1>
+        <button id="print-button" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition duration-300">
+            Generate & Print PDF
+        </button>
+    </div>
+
+    <!-- Main Content Grid --><div class="flex flex-col lg:flex-row max-w-7xl mx-auto p-4 lg:p-8 gap-8">
+
+        <!-- Input Form Container --><div id="form-container" class="w-full lg:w-1/3 bg-white p-6 rounded-xl shadow-xl">
+            <form id="input-form" onsubmit="event.preventDefault();">
+                <h2 class="text-xl font-semibold mb-6 border-b pb-3">Enter Details</h2>
+                
+                <!-- Form Fields --><div class="space-y-5">
+                    <div>
+                        <label for="input-name" class="block text-sm font-medium text-gray-700 mb-1">Name (नाव)</label>
+                        <!-- Removed value, added placeholder -->
+                        <input type="text" id="input-name" placeholder="Enter full name" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="input-date" class="block text-sm font-medium text-gray-700 mb-1">Date (दिनांक)</label>
+                        <!-- Removed value, added placeholder -->
+                        <input type="text" id="input-date" placeholder="DD/MM/YYYY" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="input-amount" class="block text-sm font-medium text-gray-700 mb-1">Amount Paid (भरलेली रक्कम)</label>
+                        <!-- Removed value, added placeholder -->
+                        <input type="number" id="input-amount" placeholder="Enter amount paid" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label for="input-app-no" class="block text-sm font-medium text-gray-700 mb-1">Loan Account No. (कर्ज खाते नं.)</label>
+                        <!-- Removed value, added placeholder -->
+                        <input type="text" id="input-app-no" placeholder="Enter loan account no." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- New Input Field --><div>
+                        <label for="input-loan-amount" class="block text-sm font-medium text-gray-700 mb-1">Loan Amount (कर्ज रक्कम)</label>
+                        <input type="number" id="input-loan-amount" placeholder="Enter total loan amount" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label for="input-image" class="block text-sm font-medium text-gray-700 mb-1">Gold Image (सोन्याचा फोटो)</label>
+                        <input type="file" id="input-image" accept="image/*" class="w-full text-sm text-gray-500
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-full file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-blue-50 file:text-blue-700
+                            hover:file:bg-blue-100
+                        ">
+                    </div>
+                </div>
+                
+                <!-- Item Details Section --><div class="mt-8 pt-6 border-t">
+                    <h3 class="text-lg font-semibold mb-4">Item Details (मालाचा तपशील)</h3>
+                    <div class="grid grid-cols-3 gap-3 mb-3">
+                        <div>
+                            <label for="item-desc" class="block text-xs font-medium text-gray-600">तपशील</label>
+                            <input type="text" id="item-desc" placeholder="e.g., CHAIN" class="w-full mt-1 px-2 py-1.5 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="item-qty" class="block text-xs font-medium text-gray-600">नग</label>
+                            <input type="number" id="item-qty" placeholder="1" class="w-full mt-1 px-2 py-1.5 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="item-weight" class="block text-xs font-medium text-gray-600">वजन ग्राम</label>
+                            <input type="number" step="0.1" id="item-weight" placeholder="18.8" class="w-full mt-1 px-2 py-1.5 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                    <button id="add-item-button" type="button" class="w-full bg-green-500 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-green-600 transition duration-300">
+                        Add Item
+                    </button>
+
+                    <!-- Added Items List --><div id="item-list" class="mt-4 space-y-2">
+                        <!-- Items will be added here dynamically --></div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Preview Area --><div class="w-full lg:w-2/3">
+            <!-- Reduced padding p-8 and min-height --><div id="print-area" class="bg-white p-8 rounded-xl shadow-2xl min-h-[900px] aspect-[8.5/11]">
+                
+                <div class="flex justify-between items-start">
+                    <!-- Image Placeholder --><div class="w-1/4">
+                        <img id="preview-image" src="https://placehold.co/150x150/e2e8f0/94a3b8?text=Gold+Image" alt="Gold Image" class="border-2 border-gray-300 rounded-md w-full object-cover">
+                    </div>
+                    
+                    <!-- Header Text --><div class="w-3/4 text-right">
+                        <!-- Logo fixed to use working URL -->
+                        <img src="ESD.jpg" alt="ESD Loans Logo" class="h-12 inline-block mb-2" style="height:70px; width:70px;">
+                        <h1 class="inline-block align-bottom ml-2">ESD LOANS</h1>
+
+                        <p class="header-text">(Licenced Money Lender under Maharashtra Act, 2014)</p>
+                        <p class="header-text">Licence No. 804 - Adrress - At Post Falegaon, Tal. Kalyan, Dist. Thane.</p>
+                    </div>
+                </div>
+
+                <!-- Form Titles --><div class="mt-4"> <!-- Reduced margin --><p class="form-title">कर्ज फेडीनंतर तारण सोने परत मागण्यासाठी अर्ज</p>
+                    <p class="sub-title">सोनेतारण मागणी अर्ज</p>
+                </div>
+
+                <!-- Date --><div class="text-right mb-4">
+                    <strong>दिनांक:</strong> <span id="preview-date" class="data-field">...</span>
+                </div>
+                
+                <!-- Main Body --><div class="text-base">
+                    <p>मा. व्यवस्थापक,</p>
+                    <p>ESD LOANS - शाखा - फळेगांव</p>
+
+                    <p class="mt-4">यांस वि.वि.</p>
+                    <p class="text-base">
+                        मी श्री/सौ. <span id="preview-name" class="data-field">...</span> मी आपल्या ताब्यात दिलेल्या सोन्याचा खालील नमूद केलेले तारण सोने परत देण्याची व्यवस्था करावी असे अर्ज करत आहे.
+                    </p>
+                    
+                    <p class="mt-4">
+                        त्याकरिता आज रु. <span id="preview-amount" class="data-field">...</span> आम्ही आमचे कर्ज खाती भरले / भरीत आहे.
+                    </p>
+
+                    <!-- Updated Line --><p class="mt-4">
+                        <strong>कर्ज खाते नं.</strong> <span id="preview-app-no" class="data-field">...</span>
+                        <span class="ml-8"><strong>कर्ज रक्कम</strong> <span id="preview-loan-amount" class="data-field">...</span></span>
+                    </p>
+                </div>
+
+                <!-- Details Table --><div class="my-6">
+                    <p class="font-semibold">परत दिलेल्या मालाचा तपशील</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>तपशील</th>
+                                <th>नग</th>
+                                <th>वजन ग्राम</th>
+                            </tr>
+                        </thead>
+                        <tbody id="preview-table-body">
+                            <!-- Rows will be added dynamically --></tbody>
+                    </table>
+                </div>
+
+                <!-- Footer Text --><div class="text-base">
+                    <p>
+                        सदरच्या गहाणाच्या वस्तूची पिशवी सील फोडण्यापूर्वी मला दाखविली त्यावेळेस पिशवीचे सील बरोबर होते. त्याबद्दल तक्रार नाही.
+                    </p>
+
+                    <!-- User's custom signature layout -->
+                    <div class="text-base">
+                        <p>खातेदाराची सही_____________________</p>
+                    </div>
+                    <div class="text-base">
+                         <p>वर नमूद केलेला सोने तारण माल आज रोजी खातेदाराच्या ताब्यात दिला .</p>
+                         <p class="text-right">व्यवस्थापक सही _______________________</p>
+                         <p class="text-right">व्यवस्थापक नाव -______________________</p>
+                    </div>
+                    <div class="signature-section flex justify-between items-end">
+                        <div>
+                            <p class="text-base">मी कर्ज खातेदार वर नमूद केलेला माल पोहचला. त्याबद्ध तक्रार नाही.</p>
+                            <p class="text-right">खातेदाराची सही / अंगुठा- ______________________</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State for items in the table
+        // Removed pre-filled item
+        let items = [];
+
+        // Get DOM Elements
+        const form = document.getElementById('input-form');
+        const printButton = document.getElementById('print-button');
+        const imageInput = document.getElementById('input-image');
+        const addItemButton = document.getElementById('add-item-button');
+        const itemListDiv = document.getElementById('item-list');
+        
+        // Preview Elements
+        const previewImage = document.getElementById('preview-image');
+        const previewTableBody = document.getElementById('preview-table-body');
+        const previewName = document.getElementById('preview-name');
+        const previewDate = document.getElementById('preview-date');
+        const previewAmount = document.getElementById('preview-amount');
+        const previewAppNo = document.getElementById('preview-app-no');
+        const previewLoanAmount = document.getElementById('preview-loan-amount'); // New element
+
+        // --- Functions ---
+
+        /**
+         * Renders the items array into the preview table
+         */
+        function renderTable() {
+            // Clear existing table body
+            previewTableBody.innerHTML = '';
+            
+            // Clear existing item list in form
+            itemListDiv.innerHTML = '';
+
+            if (items.length === 0) {
+                previewTableBody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-500 italic">No items added</td></tr>';
+                itemListDiv.innerHTML = '<p class="text-sm text-gray-500 text-center italic">No items added yet.</p>';
+                return;
+            }
+
+            // Loop through items and add them to preview table and form list
+            items.forEach((item, index) => {
+                // Add to preview table
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.desc}</td>
+                    <td>${item.qty}</td>
+                    <td>${item.weight}</td>
+                `;
+                previewTableBody.appendChild(tr);
+
+                // Add to form item list
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'flex justify-between items-center bg-gray-50 p-2 rounded-md';
+                itemDiv.innerHTML = `
+                    <span class="text-sm font-medium">${item.desc} (${item.qty} x ${item.weight}g)</span>
+                    <button type="button" onclick="removeItem(${index})" class="text-red-500 hover:text-red-700 font-bold">&times;</button>
+                `;
+                itemListDiv.appendChild(itemDiv);
+            });
+        }
+
+        /**
+         * Removes an item from the state and re-renders
+         * @param {number} index - The index of the item to remove
+         */
+        window.removeItem = function(index) {
+            items.splice(index, 1);
+            renderTable();
+        }
+
+        /**
+         * Updates the preview fields based on form input
+         */
+        function updatePreview(event) {
+            const target = event.target;
+            const value = target.value || '...';
+            
+            // Using a simple switch for clarity
+            switch(target.id) {
+                case 'input-name':
+                    previewName.textContent = value;
+                    break;
+                case 'input-date':
+                    previewDate.textContent = value;
+                    break;
+                case 'input-amount':
+                    // Updated to '...' for consistency
+                    previewAmount.textContent = value; 
+                    break;
+                case 'input-app-no':
+                    previewAppNo.textContent = value;
+                    break;
+                case 'input-loan-amount':
+                    previewLoanAmount.textContent = value;
+                    break;
+            }
+        }
+
+        // --- Event Listeners ---
+
+        // Update preview on form input
+        form.addEventListener('input', updatePreview);
+
+        // Handle image upload
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle "Add Item" button click
+        addItemButton.addEventListener('click', () => {
+            const descInput = document.getElementById('item-desc');
+            const qtyInput = document.getElementById('item-qty');
+            const weightInput = document.getElementById('item-weight');
+
+            const desc = descInput.value;
+            const qty = parseFloat(qtyInput.value);
+            const weight = parseFloat(weightInput.value);
+
+            if (!desc || isNaN(qty) || isNaN(weight) || qty <= 0 || weight <= 0) {
+                // Replaced alert with a less intrusive custom modal (or console log for now)
+                // In a real app, you'd show a modal. Using console.error for this environment.
+                console.error('Please enter valid item details (Description, Quantity > 0, Weight > 0).');
+                // Create a temporary error message
+                let errorMsg = document.getElementById('form-error-msg');
+                if (!errorMsg) {
+                    errorMsg = document.createElement('p');
+                    errorMsg.id = 'form-error-msg';
+                    errorMsg.className = 'text-red-500 text-sm mt-2';
+                    addItemButton.after(errorMsg);
+                }
+                errorMsg.textContent = 'Please enter valid item details (Description, Quantity > 0, Weight > 0).';
+                setTimeout(() => errorMsg.remove(), 3000); // Remove message after 3s
+                
+                return;
+            }
+
+            // Add to state
+            items.push({ desc, qty, weight });
+            
+            // Re-render the table/list
+            renderTable();
+
+            // Clear inputs
+            descInput.value = '';
+            qtyInput.value = '';
+            weightInput.value = '';
+        });
+
+        // Handle Print Button
+        printButton.addEventListener('click', () => {
+            window.print();
+        });
+
+        // --- Initial Render ---
+        // Render the now-empty table
+        renderTable(); 
+        
+        // Set initial preview text to placeholders
+        // We can just grab the empty values which will trigger the '...' fallback
+        previewName.textContent = document.getElementById('input-name').value || '...';
+        previewDate.textContent = document.getElementById('input-date').value || '...';
+        previewAmount.textContent = document.getElementById('input-amount').value || '...';
+        previewAppNo.textContent = document.getElementById('input-app-no').value || '...';
+        previewLoanAmount.textContent = document.getElementById('input-loan-amount').value || '...';
+    </script>
+</body>
+</html>
+

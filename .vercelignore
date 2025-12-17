@@ -1,0 +1,13 @@
+node_modules
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.DS_Store
+*.log
+.next/cache
+.vercel
+diagnose-payment.html
+PARTIAL_PAYMENT_SYSTEM_COMPLETE.md
+scripts/
+README.md
