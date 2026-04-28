@@ -293,5 +293,3 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md).
 ## License
 
 [MIT](./LICENSE)
-#   L a u n c h I n 4 8  
- 
